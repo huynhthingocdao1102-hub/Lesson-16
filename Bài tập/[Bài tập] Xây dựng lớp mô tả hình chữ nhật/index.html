@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="myCanvas" width="300" height="200"></canvas>
+<script>
+    class Rectangle {
+        constructor(length, width) {
+            this.length = length;
+            this.width = width;
+        }
+
+        getArea() {
+            return this.length * this.width;
+        }
+
+        getPerimeter() {
+            return 2 * (this.length + this.width);
+        }
+
+        draw() {
+            let canvas = document.getElementById("myCanvas");
+            let ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#FF99FF";
+            ctx.fillRect(50, 50, this.length, this.width);
+        }
+
+        setSize(newLength, newWidth) {
+            this.length = newLength;
+            this.width = newWidth;
+        }
+    }
+
+    let rectangle = new Rectangle(400, 200);
+    rectangle.draw();
+
+    rectangle.setSize(300, 200);
+    rectangle.draw();
+
+    document.write("<br>Sau khi thay đổi:<br>");
+    document.write("Diện tích mới: " + rectangle.getArea() + "<br>");
+    document.write("Chu vi mới: " + rectangle.getPerimeter());
+</script>
+</body>
+</html>

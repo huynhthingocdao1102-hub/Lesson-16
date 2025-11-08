@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    class Mobile {
+        constructor(name) {
+            this.name = name;
+            this.isOn = false;
+            this.battery = 100;
+            this.draft = "";
+            this.inbox = [];
+            this.sent = [];
+        }
+
+        powerOn() {
+            if (this.battery > 0) {
+                this.isOn = true;
+                document.write(`${this.name} đã bật.<br>`);
+            } else {
+                document.write(`${this.name} không đủ pin để bật.<br>`);
+            }
+        }
+
+        powerOff() {
+            this.isOn = false;
+            document.write(`${this.name} đã tắt.<br>`);
+        }
+
+        charge(amount) {
+            this.battery += amount;
+            if (this.battery > 100) this.battery = 100;
+            document.write(`${this.name} sạc xong. Pin hiện tại: ${this.battery}<br>`);
+        }
+
+        composeMessage(message) {
+            if (!this.isOn) {
+                document.write(`${this.name} đang tắt. Không thể soạn tin.<br>`);
+                return;
+            }
+            if (this.battery <= 0) {
+                document.write(`${this.name} hết pin. Không thể soạn tin.<br>`);
+                return;
+            }
+            this.draft = message;
+            this.battery -= 1;
+            document.write(`${this.name} đã soạn tin: "${message}"<br>`);
+        }
+
+        sendMessage(toMobile) {
+            if (!this.isOn || this.battery <= 0) {
+                document.write(`${this.name} không thể gửi tin.<br>`);
+                return;
+            }
+            if (this.draft === "") {
+                document.write("Không có tin nhắn để gửi.<br>");
+                return;
+            }
+            toMobile.receiveMessage(this.draft);
+            this.sent.push(this.draft);
+            document.write(`${this.name} đã gửi tin: "${this.draft}" đến ${toMobile.name}<br>`);
+            this.draft = "";
+            this.battery -= 1;
+        }
+
+        receiveMessage(message) {
+            if (!this.isOn || this.battery <= 0) {
+                document.write(`${this.name} không thể nhận tin.<br>`);
+                return;
+            }
+            this.inbox.push(message);
+            this.battery -= 1;
+        }
+
+        viewInbox() {
+            if (!this.isOn) {
+                document.write(`${this.name} đang tắt. Không thể xem inbox.<br>`);
+                return;
+            }
+            document.write(`${this.name} - Hộp thư đến:<br>`);
+            if (this.inbox.length === 0) {
+                document.write("  (Chưa có tin nhắn)<br>");
+            } else {
+                this.inbox.forEach((msg, i) => document.write(`  ${i + 1}: ${msg}<br>`));
+            }
+        }
+
+        viewSent() {
+            if (!this.isOn) {
+                document.write(`${this.name} đang tắt. Không thể xem tin đã gửi.<br>`);
+                return;
+            }
+            document.write(`${this.name} - Tin nhắn đã gửi:<br>`);
+            if (this.sent.length === 0) {
+                document.write("  (Chưa gửi tin nhắn nào)<br>");
+            } else {
+                this.sent.forEach((msg, i) => document.write(`  ${i + 1}: ${msg}<br>`));
+            }
+        }
+    }
+
+    let Nokia = new Mobile("Nokia");
+    let iPhone = new Mobile("iPhone");
+
+    Nokia.powerOn();
+    iPhone.powerOn();
+
+    Nokia.composeMessage("Xin chào iPhone!");
+    Nokia.sendMessage(iPhone);
+
+    iPhone.viewInbox();
+</script>
+</body>
+</html>
